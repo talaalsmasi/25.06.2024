@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="p">
+        <br>
+        <input type="text" id="pokemonName" placeholder="Enter Pokemon name">
+        <button onclick="Pokemon()">Search</button>
+        <div id="pokemonPic" "></div>
+    </div>
+
+    <script>
+        function Pokemon() {
+            const pokemonName = document.getElementById('pokemonName').value;
+            const apiUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
+
+            fetch(apiUrl)
+                .then(function(response)  {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    const pokemonPic = document.getElementById('pokemonPic');
+                    pokemonPic.innerHTML = `<img src="${data.sprites.front_default}" alt="${data.name}">`; ;
+                })
+                .catch(function(error)  {
+                    console.error('Error:', error);
+                    document.getElementById('pokemonData').innerHTML = '<p>Pokemon not found.</p>';
+                });
+        }
+    </script>
+</body>
+</html>

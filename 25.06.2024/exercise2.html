@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exercise2</title>
+    <style>
+      #container {
+        display: flex;
+      }
+    </style>
+</head>
+<body>
+    <div id="container">
+      <input type="text" id="text">
+      <button id="ok">ok</button> 
+    </div>
+    <div id="picture"></div>
+    <div id="description"></div>
+    
+</body>
+<script>
+    let text = document.getElementById("text");
+    let ok = document.getElementById("ok");
+
+    ok.addEventListener('click', function() {
+      let textt = text.value;
+      let apikey = 'AIzaSyBN5iPB6JtOWKjmWS1P9wdHFF7UAKnYYJo';
+      let apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${textt}&key=${apikey}`;
+
+      fetch(apiUrl)
+          .then(function(response) {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(function(data) {
+              const picture = document.getElementById("picture");
+              const thumbnailUrl = data.items[0].snippet.thumbnails.default.url;
+              picture.innerHTML = `<img src="${thumbnailUrl}" alt="Video Thumbnail">`;
+              
+              const description = document.getElementById("description");
+              description.textContent = data.items[0].snippet.description;
+          })
+          .catch(function(error) {
+              console.error('Error:', error);
+          });
+    });
+</script>
+</html>
